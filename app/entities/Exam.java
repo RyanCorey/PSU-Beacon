@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
@@ -16,22 +17,35 @@ public class Exam {
     private long id;
     private String examTitle;
     private Set<Question> questions;
+    //ManyToOne Mimic
+    private User professor;
     
     public Exam() {
         
     }
     
-    public Exam(long id, String examTitle) {
-        this.id = id;
+    public Exam(long id, String examTitle, User professor) {
+        // Mimic auto generation of ID
+        this.id = ThreadLocalRandom.current().nextLong(0);
         this.examTitle = examTitle;
+        this.professor = professor;
     }
     
     public Exam(long id, String examTitle, Set<Question> questions) {
-        this.id = id;
+        // Mimic auto generation of ID
+        this.id = ThreadLocalRandom.current().nextLong(0);
         this.examTitle = examTitle;
         this.questions = questions;
     }
-    
+
+    public User getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(User professor) {
+        this.professor = professor;
+    }
+
     public long getId() {
         return this.id;
     }

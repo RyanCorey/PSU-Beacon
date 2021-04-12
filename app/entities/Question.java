@@ -5,7 +5,11 @@
  */
 package entities;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.io.Serializable;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
@@ -17,6 +21,8 @@ public class Question implements Serializable{
     private String questionText;
     
     private Exam exam;
+
+    private Set<Answer> answers;
     
     public Question() {}
     
@@ -24,8 +30,12 @@ public class Question implements Serializable{
         
     }
     
-    public Question(long id, String questionText, Exam exam) {
-        
+    public Question(long id, String questionText, Exam exam, Set<Answer> answers) {
+        // Mimic auto generation of ID
+        this.id = ThreadLocalRandom.current().nextLong(0);
+        this.questionText = questionText;
+        this.exam = exam;
+        this.answers = answers;
     }
     
     public long getId() {

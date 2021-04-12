@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Answer {
     private Long id;
     private String answerText;
@@ -9,6 +11,8 @@ public class Answer {
     }
 
     public Answer(String answerText, Boolean isCorrect) {
+        // Mimic auto generation of ID
+        this.id = ThreadLocalRandom.current().nextLong(0);
         this.answerText = answerText;
         this.isCorrect = isCorrect;
     }

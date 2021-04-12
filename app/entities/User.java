@@ -2,6 +2,8 @@ package entities;
 
 import entities.enumerations.Role;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class User {
     private Long id;
     private String firstName;
@@ -9,7 +11,8 @@ public class User {
     private Role role;
 
     public User(Long id, String firstName, String lastName, Role role) {
-        this.id = id;
+        // Mimic auto generation of ID
+        this.id = ThreadLocalRandom.current().nextLong(0);
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
