@@ -1,40 +1,37 @@
 package entities;
 
-import java.util.concurrent.ThreadLocalRandom;
+import javax.persistence.*;
 
+@Entity
 public class ExamResult {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private Double finalScore;
+
     private String comments;
-    // Mimic ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private User student;
-    // Mimic ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private Exam exam;
 
-    public ExamResult(Long id, Double finalScore, String comments, User student, Exam exam) {
-        // Mimic auto generation of ID
-        this.id = ThreadLocalRandom.current().nextLong(0);
+
+    public ExamResult(Double finalScore, String comments, User student, Exam exam) {
         this.finalScore = finalScore;
         this.comments = comments;
         this.student = student;
         this.exam = exam;
     }
 
-    public ExamResult(Double finalScore, String comments, User student, Exam exam) {
-        // Mimic auto generation of ID
-        this.id = ThreadLocalRandom.current().nextLong(0);
-        this.finalScore = finalScore;
-        this.comments = comments;
-        this.student = student;
-        this.exam = exam;
+    public ExamResult() {
+
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Double getFinalScore() {

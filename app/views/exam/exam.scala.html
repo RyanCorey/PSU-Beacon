@@ -1,0 +1,40 @@
+@import play.twirl.api.TwirlHelperImports.twirlJavaCollectionToScala
+@import entities.Exam
+@import java.util
+@(exams: util.List[Exam])
+
+@main("Beaconn | Exams") {
+    <div class="container">
+        <h1 class="text-center">View Exams</h1>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Exam Name</th>
+                    <th scope="col"># of Questions</th>
+                    <th scope="col">Professor</th>
+                    <th scope="col"/>
+                </tr>
+            </thead>
+            <tbody>
+                @if(exams.isEmpty) {
+                    <p>No Exams</p>
+                } else {
+                    @for(exam <- exams) {
+                        <tr>
+                            <th scope="row">@exam.getId</th>
+                            <th>@exam.getExamTitle</th>
+                            <th>@exam.getQuestions.size</th>
+                            <th>@exam.getProfessor.getFirstName</th>
+                            <th>
+                                <button type="button" class="btn btn-primary" onclick="location.href=`/exams/${@exam.getId}`">View</button>
+                            </th>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+

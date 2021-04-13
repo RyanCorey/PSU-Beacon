@@ -2,17 +2,26 @@ package entities;
 
 import entities.enumerations.Role;
 
-import java.util.concurrent.ThreadLocalRandom;
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String firstName;
+
     private String lastName;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(Long id, String firstName, String lastName, Role role) {
-        // Mimic auto generation of ID
-        this.id = ThreadLocalRandom.current().nextLong(0);
+    @OneToMany(mappedBy="student", fetch = FetchType.EAGER)
+    private Set<ExamResult> examResults;
+
+    public User(String firstName, String lastName, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
@@ -25,9 +34,6 @@ public class User {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;

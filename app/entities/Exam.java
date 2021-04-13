@@ -5,19 +5,26 @@
  */
 package entities;
 
-import java.io.Serializable;
+import javax.persistence.*;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
  * @author mtripo225
  */
+@Entity
 public class Exam {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
     private String examTitle;
+
+    @OneToMany(mappedBy="exam", fetch = FetchType.EAGER)
     private Set<Question> questions;
-    //ManyToOne Mimic
+
+    //ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User professor;
     
     public Exam() {
@@ -25,15 +32,11 @@ public class Exam {
     }
     
     public Exam(long id, String examTitle, User professor) {
-        // Mimic auto generation of ID
-        this.id = ThreadLocalRandom.current().nextLong(0);
         this.examTitle = examTitle;
         this.professor = professor;
     }
     
     public Exam(long id, String examTitle, Set<Question> questions) {
-        // Mimic auto generation of ID
-        this.id = ThreadLocalRandom.current().nextLong(0);
         this.examTitle = examTitle;
         this.questions = questions;
     }

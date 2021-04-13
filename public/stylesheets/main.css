@@ -1,0 +1,23 @@
+.app-container {
+    box-sizing: border-box;
+}
+.app-container .view-container {
+    width: 100%;
+    height: calc(100% - 40px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 5rem 1rem 1rem;
+}
+.app-container .view-container .card {
+    padding: 1rem;
+}
+.app-container .view-container .view-routes {
+    height: 100%;
+}
+.app-container .view-container .view-routes > div {
+    height: 100%;
+}
+
+.hiddenRow {
+    padding: 0 !important;
+}
