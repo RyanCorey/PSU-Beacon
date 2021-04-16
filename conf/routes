@@ -2,14 +2,27 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# An example controller showing a sample home page
+# Home page
 GET     /                           controllers.HomeController.index()
+
+# Exam URL
 GET     /exams                      controllers.ExamController.getExams()
-+ nocsrf
-POST    /exams/:id/question/add         controllers.ExamController.addQuestion(id: Long, request: Request)
 GET     /exams/:id                  controllers.ExamController.getExam(id: Long, request: Request)
-GET     /results                    controllers.ExamResultsController.index()
++ nocsrf
+POST    /exams/:id/question/add     controllers.ExamController.addQuestion(id: Long, request: Request)
+
+# Exam RESULTS URLS
+GET     /results                    controllers.ExamResultsController.getExamResults()
 #GET     /results/:id                controllers.ExamResultsController.index()
+
+# Question URLS
+GET     /questions                  controllers.QuestionController.getQuestions()
+
+# Answer URLS
+GET     /answers                    controllers.AnswerController.getAnswers()
+
+# User URLS
+GET     /users                      controllers.UserController.getUsers()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

@@ -1,7 +1,6 @@
 package entities;
 
 import javax.persistence.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Entity
 public class Answer {

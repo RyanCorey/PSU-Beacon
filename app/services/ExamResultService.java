@@ -8,12 +8,9 @@ import repositories.ExamResultRepository;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
-import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 public class ExamResultService implements ExamResultRepository{
     private final Logger log = Logger.getLogger(ExamResultService.class.toString());
@@ -29,23 +26,23 @@ public class ExamResultService implements ExamResultRepository{
     }
 
     @Override
-    public CompletionStage<ExamResult> save(ExamResult examResult) {
-        return supplyAsync(() -> wrap(em -> insert(em, examResult)), executionContext);
+    public ExamResult save(ExamResult examResult) {
+        return wrap(em -> insert(em, examResult));
     }
 
     @Override
-    public CompletionStage<ExamResult> update(ExamResult examResult) {
-        return supplyAsync(() -> wrap(em -> updateJPA(em, examResult)), executionContext);
+    public ExamResult update(ExamResult examResult) {
+        return wrap(em -> updateJPA(em, examResult));
     }
 
     @Override
-    public CompletionStage<ExamResult> getExamResultById(Long examId) {
-        return supplyAsync(() -> wrap(em -> getExamResultJPA(em, examId)), executionContext);
+    public ExamResult getExamResultById(Long examId) {
+        return wrap(em -> getExamResultJPA(em, examId));
     }
 
     @Override
-    public CompletionStage<Stream<ExamResult>> list() {
-        return supplyAsync(() -> wrap(this::list), executionContext);
+    public List<ExamResult> list() {
+        return wrap(this::list);
     }
 
     private <T> T wrap(Function<EntityManager, T> function) {
@@ -61,9 +58,8 @@ public class ExamResultService implements ExamResultRepository{
         return examResult;
     }
 
-    private Stream<ExamResult> list(EntityManager em) {
-        List<ExamResult> exams = em.createQuery("select e from ExamResult e", ExamResult.class).getResultList();
-        return exams.stream();
+    private List<ExamResult> list(EntityManager em) {
+        return em.createQuery("select e from ExamResult e", ExamResult.class).getResultList();
     }
 
     public ExamResult updateJPA(EntityManager em, ExamResult examResult) {

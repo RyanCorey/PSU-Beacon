@@ -9,13 +9,9 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import services.ExamService;
-import services.QuestionService;
-
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 
 public class ExamController extends Controller {
@@ -41,23 +37,35 @@ public class ExamController extends Controller {
         this.messagesApi = messagesApi;
     }
 
-    public CompletionStage<Result> getExams() {
+    /**
+     * Serves as the initial page a user would see /exams
+     * @return Request (List of Exams)
+     */
+    public Result getExams() {
         logger.log(Level.INFO, "Request to get All Exams");
-        return examService
-                .list()
-                .thenApplyAsync(examStream ->
-                                ok(views.html.exam.exam.render(examStream.collect(Collectors.toList()))),
-                        ec.current());
+        var results = examService.list();
+        return ok(views.html.exam.exam.render(results));
     }
 
-    public CompletionStage<Result> getExam(Long id, Http.Request request) {
+    /**
+     * Get request. Get's an exam based on its database PK(id)
+     * @param id The PK of the entity to retrieve
+     * @param request The HTTP request
+     * @return Result (Single Exam Item)
+     */
+    public Result getExam(Long id, Http.Request request) {
         logger.log(Level.INFO, "Request to get Exam: {}", id);
         Form<QuestionForm> questionForm = formFactory.form(QuestionForm.class).withDirectFieldAccess(true);
-        return examService
-                .getExamById(id)
-                .thenApplyAsync(exam -> ok(views.html.exam.exam_detail.render(exam, questionForm, messagesApi.preferred(request))), ec.current());
+        var result = examService.getExamById(id);
+        return ok(views.html.exam.exam_detail.render(result, questionForm, messagesApi.preferred(request)));
     }
 
+    /**
+     * Post request. Creates a new question for an Exam
+     * @param id The PK of the EXAM to add a question to
+     * @param request The HTTP request
+     * @return Return a redirect to the getExam() method
+     */
     public Result addQuestion(Long id, Http.Request request) {
         final Form<QuestionForm> form = formFactory.form(QuestionForm.class).bindFromRequest(request);
         examService.addQuestion(id, form.get());

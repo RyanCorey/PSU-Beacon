@@ -8,12 +8,9 @@ import repositories.AnswerRepository;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
-import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 public class AnswerService implements AnswerRepository {
     private final Logger log = Logger.getLogger(AnswerService.class.toString());
@@ -30,28 +27,23 @@ public class AnswerService implements AnswerRepository {
     }
 
     @Override
-    public CompletionStage<Answer> save(Answer answer) {
-        return supplyAsync(() -> wrap(em -> insert(em, answer)), executionContext);
-    }
-
-    @Override
-    public Answer saveWait(Answer answer) {
+    public Answer save(Answer answer) {
         return wrap(em -> insert(em, answer));
     }
 
     @Override
-    public CompletionStage<Answer> update(Answer answer) {
-        return supplyAsync(() -> wrap(em -> updateJPA(em, answer)), executionContext);
+    public Answer update(Answer answer) {
+        return wrap(em -> updateJPA(em, answer));
     }
 
     @Override
-    public CompletionStage<Answer> getAnswerById(Long examId) {
-        return supplyAsync(() -> wrap(em -> getAnswerJPA(em, examId)), executionContext);
+    public Answer getAnswerById(Long examId) {
+        return wrap(em -> getAnswerJPA(em, examId));
     }
 
     @Override
-    public CompletionStage<Stream<Answer>> list() {
-        return supplyAsync(() -> wrap(this::list), executionContext);
+    public List<Answer> list() {
+        return wrap(this::getList);
     }
 
     private <T> T wrap(Function<EntityManager, T> function) {
@@ -67,9 +59,8 @@ public class AnswerService implements AnswerRepository {
         return answer;
     }
 
-    private Stream<Answer> list(EntityManager em) {
-        List<Answer> exams = em.createQuery("select e from Answer e", Answer.class).getResultList();
-        return exams.stream();
+    private List<Answer> getList(EntityManager em) {
+        return em.createQuery("select e from Answer e", Answer.class).getResultList();
     }
 
     public Answer updateJPA(EntityManager em, Answer answer) {

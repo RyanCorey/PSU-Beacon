@@ -9,12 +9,9 @@ import repositories.UserRepository;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
-import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 public class UserService implements UserRepository {
     private final Logger log = Logger.getLogger(UserService.class.toString());
@@ -30,23 +27,23 @@ public class UserService implements UserRepository {
     }
 
     @Override
-    public CompletionStage<User> save(User user) {
-        return supplyAsync(() -> wrap(em -> insert(em, user)), executionContext);
+    public User save(User user) {
+        return wrap(em -> insert(em, user));
     }
 
     @Override
-    public CompletionStage<User> update(User user) {
-        return supplyAsync(() -> wrap(em -> updateJPA(em, user)), executionContext);
+    public User update(User user) {
+        return wrap(em -> updateJPA(em, user));
     }
 
     @Override
-    public CompletionStage<User> getUserById(Long examId) {
-        return supplyAsync(() -> wrap(em -> getUserJPA(em, examId)), executionContext);
+    public User getUserById(Long examId) {
+        return wrap(em -> getUserJPA(em, examId));
     }
 
     @Override
-    public CompletionStage<Stream<User>> list() {
-        return supplyAsync(() -> wrap(this::list), executionContext);
+    public List<User> list() {
+        return wrap(this::list);
     }
 
     private <T> T wrap(Function<EntityManager, T> function) {
@@ -62,9 +59,8 @@ public class UserService implements UserRepository {
         return user;
     }
 
-    private Stream<User> list(EntityManager em) {
-        List<User> exams = em.createQuery("select e from User e", User.class).getResultList();
-        return exams.stream();
+    private List<User> list(EntityManager em) {
+        return em.createQuery("select e from User e", User.class).getResultList();
     }
 
     public User updateJPA(EntityManager em, User user) {
