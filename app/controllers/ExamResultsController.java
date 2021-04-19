@@ -52,7 +52,7 @@ public class ExamResultsController extends Controller {
      */
     public Result getExamResult(Long id, Http.Request request){
         logger.log(Level.INFO, "Request to get Exam Result Item: {}", id);
-        var res = questionService.getQuestionListById(id);
+        var res = questionService.getListQuestionById(id);
         var result = answerService.getAnswerListById(id);
         return ok(views.html.results.results_detail.render(res, result));
     }

@@ -2,6 +2,7 @@
 @import java.util
 @import entities.ExamResult
 @(exams: util.List[ExamResult])
+@import java.math.BigInteger; var true_count=0; var false_count=0; var score=0.0; var total = 0;
 
 @main("Beaconn | Exam Results") {
     <div class="container">
@@ -25,11 +26,22 @@
                 <p>No Exams</p>
             } else {
                 @for(exam <- exams){
+                    @for(q <- exam.getExam.getQuestions){
+                        @for(a <- q.getAnswers){
+                            @if(a.getCorrect == true){
+                                @(true_count = true_count + 1)
+                            } else{
+                                @(false_count = false_count + 1)
+                            }
+                        }
+                    }
+                    @(total = true_count + false_count)
+                    @(score = (true_count.toFloat / total)*100)
                     <tr>
                         <th scope="row">@exam.getId</th>
                         <th>@exam.getExam.getExamTitle</th>
                         <th>@exam.getStudent.getFirstName @exam.getStudent.getLastName</th>
-                        <th>@exam.getFinalScore</th>
+                        <th>@score</th>
                         <th>@exam.getComments</th>
                         <th>@exam.getExam.getProfessor.getLastName</th>
                         <th>

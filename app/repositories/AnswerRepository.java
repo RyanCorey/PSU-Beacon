@@ -15,6 +15,8 @@ public interface AnswerRepository {
 
     List<Answer> list();
 
+    List<Answer> getListAnswerCountById(Long id);
+
     Answer save(Answer answer);
 
     Answer update(Answer answer);

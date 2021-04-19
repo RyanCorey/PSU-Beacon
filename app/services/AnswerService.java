@@ -52,6 +52,11 @@ public class AnswerService implements AnswerRepository {
         return wrap(this::getList);
     }
 
+    @Override
+    public List<Answer> getListAnswerCountById(Long id){
+        return wrap( em -> getListAnswerCountById(em, id));
+    }
+
     private <T> T wrap(Function<EntityManager, T> function) {
         return jpaApi.withTransaction(function);
     }
@@ -77,4 +82,9 @@ public class AnswerService implements AnswerRepository {
         em.merge(answer);
         return answer;
     }
+
+    public List<Answer> getListAnswerCountById(EntityManager em, Long examId){
+        return em.createQuery("select count (e) FROM Answer e where e.exam.id IN :examId").setParameter("examId", examId).getResultList();
+    }
+
 }

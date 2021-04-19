@@ -54,7 +54,7 @@ public class QuestionService implements QuestionRepository {
     }
 
     @Override
-    public List<Question> getQuestionListById(Long id) {
+    public List<Question> getListQuestionById(Long id) {
         return wrap(em -> getListQuestionJPA(em, id));
     }
 

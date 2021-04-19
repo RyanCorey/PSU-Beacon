@@ -38,14 +38,14 @@
                             <p>No Questions</p>
                         } else {
                             @for(q <- question){
-                                <tr>
-                                    <td>@q.getExam.getExamTitle</td>
-                                    <td>@q.getQuestionText</td>
-                                    @for(ans <- q.getAnswers){
-                                        <td>@ans.getAnswerText</td>
-                                        <td>@ans.getCorrect</td>
-                                    }
-                                </tr>
+                                @for(a <- q.getAnswers){
+                                    <tr>
+                                        <td>@q.getExam.getExamTitle</td>
+                                        <td>@q.getQuestionText</td>
+                                        <td>@a.getAnswerText</td>
+                                        <td>@a.getCorrect</td>
+                                    </tr>
+                                }
                             }
                         }
                         </tbody>
