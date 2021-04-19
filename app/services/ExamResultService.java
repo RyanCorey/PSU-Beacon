@@ -41,9 +41,15 @@ public class ExamResultService implements ExamResultRepository{
     }
 
     @Override
+    public List<ExamResult> getExamResultListById(Long examId) {
+        return wrap((this::list));
+    }
+
+    @Override
     public List<ExamResult> list() {
         return wrap(this::list);
     }
+
 
     private <T> T wrap(Function<EntityManager, T> function) {
         return jpaApi.withTransaction(function);

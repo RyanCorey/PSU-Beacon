@@ -28,7 +28,6 @@ public class QuestionService implements QuestionRepository {
         this.executionContext = executionContext;
     }
 
-
     @Override
     public Question save(Question question) {
         return wrap(em -> insert(em, question));
@@ -45,8 +44,18 @@ public class QuestionService implements QuestionRepository {
     }
 
     @Override
+    public List<Question> getListQuestionJPA(Long examId) {
+        return wrap(em -> getListQuestionJPA(em, examId));
+    }
+
+    @Override
     public List<Question> list() {
         return wrap(entityManager -> list());
+    }
+
+    @Override
+    public List<Question> getQuestionListById(Long id) {
+        return wrap(em -> getListQuestionJPA(em, id));
     }
 
     private <T> T wrap(Function<EntityManager, T> function) {
@@ -65,6 +74,14 @@ public class QuestionService implements QuestionRepository {
     private List<Question> list(EntityManager em) {
         return em.createQuery("select e from Question e", Question.class).getResultList();
     }
+
+    public List<Question> getListQuestionJPA(EntityManager em, Long examId) {
+        return em.createQuery("select e from Question e where e.exam.id IN :examId").setParameter("examId", examId).getResultList();
+    }
+
+    /*private List<Question> getQuestionListById(EntityManager em) {
+        return em.createQuery("select e from Question e where e.exam.id IN :examId", Question.class).getResultList();
+    }*/
 
     public Question updateJPA(EntityManager em, Question question) {
         em.merge(question);

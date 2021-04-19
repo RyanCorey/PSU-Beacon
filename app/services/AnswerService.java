@@ -1,6 +1,7 @@
 package services;
 
 import entities.Answer;
+import entities.Question;
 import entities.db.DatabaseExecutionContext;
 import play.db.jpa.JPAApi;
 import repositories.AnswerRepository;
@@ -42,6 +43,11 @@ public class AnswerService implements AnswerRepository {
     }
 
     @Override
+    public List<Answer> getAnswerListById(Long id) {
+        return wrap(em -> getListAnswerJPA(em, id));
+    }
+
+    @Override
     public List<Answer> list() {
         return wrap(this::getList);
     }
@@ -61,6 +67,10 @@ public class AnswerService implements AnswerRepository {
 
     private List<Answer> getList(EntityManager em) {
         return em.createQuery("select e from Answer e", Answer.class).getResultList();
+    }
+
+    public List<Answer> getListAnswerJPA(EntityManager em, Long examId) {
+        return em.createQuery("select e from Answer e where e.id IN :examId").setParameter("examId", examId).getResultList();
     }
 
     public Answer updateJPA(EntityManager em, Answer answer) {

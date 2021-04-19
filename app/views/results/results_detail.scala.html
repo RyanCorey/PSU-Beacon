@@ -1,1 +1,57 @@
-@()
+@import entities.ExamResult
+@import entities.Question
+@import entities.Answer
+@import views.html.helper.form
+@import java.util
+@(question: util.List[Question], answer: util.List[Answer])
+
+@main("Beaconn | Exam Result Items") {
+
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-3">
+                <div class="card grey lighten-5 mb-3" style="max-width: 20rem;">
+                    <div class="card-header">@question.head.getExam.getProfessor.getLastName</div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            ID: @question.head.getId
+                        </p>
+                        <p class="card-text">
+                            Professor: @question.head.getExam.getExamTitle
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <table class="table table-hover" style="border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th scope="col">Exam Name</th>
+                                <th scope="col">Question</th>
+                                <th scope="col">Answer</th>
+                                <th scope="col">Correct?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @if(question.isEmpty) {
+                            <p>No Questions</p>
+                        } else {
+                            @for(q <- question){
+                                <tr>
+                                    <td>@q.getExam.getExamTitle</td>
+                                    <td>@q.getQuestionText</td>
+                                    @for(ans <- q.getAnswers){
+                                        <td>@ans.getAnswerText</td>
+                                        <td>@ans.getCorrect</td>
+                                    }
+                                </tr>
+                            }
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -2,15 +2,18 @@ package repositories;
 
 import com.google.inject.ImplementedBy;
 import entities.Answer;
+import entities.Question;
 import services.AnswerService;
 
 import java.util.List;
 
 @ImplementedBy(AnswerService.class)
 public interface AnswerRepository {
-    List<Answer> list();
+    Answer getAnswerById(Long examId);
 
-    Answer getAnswerById(Long id);
+    List<Answer> getAnswerListById(Long id);
+
+    List<Answer> list();
 
     Answer save(Answer answer);
 

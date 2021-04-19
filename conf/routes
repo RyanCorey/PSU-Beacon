@@ -13,7 +13,7 @@ POST    /exams/:id/question/add     controllers.ExamController.addQuestion(id: L
 
 # Exam RESULTS URLS
 GET     /results                    controllers.ExamResultsController.getExamResults()
-#GET     /results/:id                controllers.ExamResultsController.index()
+GET     /results/:id                controllers.ExamResultsController.getExamResult(id: Long, request: Request)
 
 # Question URLS
 GET     /questions                  controllers.QuestionController.getQuestions()
