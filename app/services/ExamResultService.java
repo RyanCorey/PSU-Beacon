@@ -50,7 +50,6 @@ public class ExamResultService implements ExamResultRepository{
         return wrap(this::list);
     }
 
-
     private <T> T wrap(Function<EntityManager, T> function) {
         return jpaApi.withTransaction(function);
     }
