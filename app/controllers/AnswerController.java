@@ -41,18 +41,19 @@ public class AnswerController extends Controller {
     public Result getAnswers() {
         logger.log(Level.INFO, "Request to get All Answers");
         var answers = answerService.list();
-        return ok(views.html.answers.answer.render());
+        return ok(views.html.answers.answer.render(answers));
     }
 
     public Result getAnswer(Long id, Http.Request request) {
         logger.log(Level.INFO, "Request to get Answer: {}", id);
         Form<QuestionForm.AnswerForm> answerForm = formFactory.form(QuestionForm.AnswerForm.class).withDirectFieldAccess(true);
         var answer = answerService.getAnswerById(id);
-        //return ok(views.html.answers.answer_detail.render(answer, answerForm, messagesApi.preferred(request)));
-        return ok(views.html.answers.answer_detail.render());
+        return ok(views.html.answers.answer_detail.render(answer));
 
     }
 
 
 
 }
+
+
