@@ -1,2 +1,8 @@
 @import entities.Answer
 @(answer: Answer)
+
+@main("Beaconn | Answer " + answer.getId) {
+    <h1>
+        @answer.getAnswerText
+    </h1>
+}

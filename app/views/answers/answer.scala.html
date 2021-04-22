@@ -4,4 +4,14 @@
 
 @main("Beaconn | Anwers") {
     <h1>Answer listings will go here!!</h1>
+
+    <ul>
+    @for(answer <- answers) {
+        <li>
+            <a href="/answers/@answer.getId">
+                @answer.getAnswerText
+            </a>
+        </li>
+    }
+    </ul>
 }
