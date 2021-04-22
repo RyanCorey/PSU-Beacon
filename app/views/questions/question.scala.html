@@ -1,5 +1,15 @@
-@()
+@import java.util
+@import entities.Question
 
-@main("Beaconn | Questions") {
-    <h1>Question listings will go here!!</h1>
-}
+@(questions: util.List[Question])
+
+
+    @main("Beaconn | Questions") {
+        <ul>
+        @for(question <- questions) {
+            <li>
+                @question.getQuestionText
+            </li>
+        }
+        </ul>
+    }

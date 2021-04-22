@@ -46,7 +46,7 @@ public class QuestionService implements QuestionRepository {
 
     @Override
     public List<Question> list() {
-        return wrap(entityManager -> list());
+        return wrap(this::findAllQuestion);
     }
 
     private <T> T wrap(Function<EntityManager, T> function) {
@@ -62,7 +62,7 @@ public class QuestionService implements QuestionRepository {
         return question;
     }
 
-    private List<Question> list(EntityManager em) {
+    private List<Question> findAllQuestion(EntityManager em) {
         return em.createQuery("select e from Question e", Question.class).getResultList();
     }
 

@@ -1,0 +1,8 @@
+@import entities.User
+@(user: User)
+
+@main("Beaconn | User" + user.getFirstName) {
+    <h1>
+        @user.getFirstName @user.getLastName
+    </h1>
+}

@@ -1,5 +1,17 @@
-@()
+@import entities.User
+@import java.util
+@(users: util.List[User])
 
 @main("Beaconn | Users") {
     <h1>Users will go here!!</h1>
+
+    <ul>
+        @for(user <- users) {
+            <li>
+                <a href="/users/@user.getId">
+                    @user.getFirstName @user.getLastName
+                </a>
+            </li>
+        }
+    </ul>
 }
