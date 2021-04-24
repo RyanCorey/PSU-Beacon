@@ -38,6 +38,11 @@ public class AnswerService implements AnswerRepository {
     }
 
     @Override
+    public void delete(Long id) {
+        wrap(em -> deleteJPA(em, id));
+    }
+
+    @Override
     public Answer getAnswerById(Long examId) {
         return wrap(em -> getAnswerJPA(em, examId));
     }
@@ -68,6 +73,10 @@ public class AnswerService implements AnswerRepository {
     private Answer insert(EntityManager em, Answer answer) {
         em.persist(answer);
         return answer;
+    }
+
+    public int deleteJPA(EntityManager em, Long id) {
+        return em.createQuery("DELETE FROM Answer WHERE id = " + id).executeUpdate();
     }
 
     private List<Answer> getList(EntityManager em) {

@@ -20,7 +20,7 @@ public class Exam {
 
     private String examTitle;
 
-    @OneToMany(mappedBy="exam", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="exam", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Question> questions;
 
     //ManyToOne
@@ -30,7 +30,12 @@ public class Exam {
     public Exam() {
         
     }
-    
+
+    public Exam(String examTitle, User professor) {
+        this.examTitle = examTitle;
+        this.professor = professor;
+    }
+
     public Exam(long id, String examTitle, User professor) {
         this.examTitle = examTitle;
         this.professor = professor;

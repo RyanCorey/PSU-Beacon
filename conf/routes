@@ -3,29 +3,47 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.HomeController.index()
+GET     /                                       controllers.HomeController.index()
 
 # Exam URL
-GET     /exams                      controllers.ExamController.getExams()
-GET     /exams/:id                  controllers.ExamController.getExam(id: Long, request: Request)
 + nocsrf
-POST    /exams/:id/question/add     controllers.ExamController.addQuestion(id: Long, request: Request)
+POST    /exams                                  controllers.ExamController.createExam(request: Request)
+GET     /exams                                  controllers.ExamController.getExams(request: Request)
++ nocsrf
+DELETE  /exams/:id                              controllers.ExamController.deleteExam(id: Long)
+GET     /exams/:id                              controllers.ExamController.getExam(id: Long, request: Request)
++ nocsrf
+POST    /exams/:examId/question                 controllers.ExamController.addQuestion(examId: Long, request: Request)
++ nocsrf
+DELETE  /exams/:examId/question/:questionId     controllers.ExamController.deleteQuestion(examId: Long, questionId: Long)
++ nocsrf
+POST    /exams/:id/question/:questionId/answer  controllers.ExamController.addAnswer(id: Long, questionId: Long, request: Request)
++ nocsrf
+DELETE  /exams/:examId/answer/:answerId         controllers.ExamController.deleteAnswer(examId: Long, answerId: Long)
 
 # Exam RESULTS URLS
-GET     /results                    controllers.ExamResultsController.getExamResults()
-GET     /results/:id                controllers.ExamResultsController.getExamResult(id: Long, request: Request)
+GET     /results                                controllers.ExamResultsController.getExamResults()
+GET     /results/:id                            controllers.ExamResultsController.getExamResult(id: Long, request: Request)
 
 # Question URLS
-GET     /questions                  controllers.QuestionController.getQuestions()
-GET     /questions/:id              controllers.QuestionController.getQuestion(id: Long, request: Request)
+GET     /questions                              controllers.QuestionController.getQuestions()
++ nocsrf
+DELETE  /questions/:id                          controllers.QuestionController.deleteQuestion(id: Long)
+GET     /questions/:id                          controllers.QuestionController.getQuestion(id: Long, request: Request)
 
 # Answer URLS
-GET     /answers                    controllers.AnswerController.getAnswers()
-GET     /answers/:id                controllers.AnswerController.getAnswer(id: Long, request: Request)
+GET     /answers                                controllers.AnswerController.getAnswers()
++ nocsrf
+DELETE  /answers/:id                            controllers.AnswerController.deleteAnswer(id: Long)
+GET     /answers/:id                            controllers.AnswerController.getAnswer(id: Long, request: Request)
 
 # User URLS
-GET     /users                      controllers.UserController.getUsers()
-GET     /users/:id                  controllers.UserController.getUser(id: Long, request: Request)
+GET     /users                                  controllers.UserController.getUsers(request: Request)
++ nocsrf
+POST    /users                                  controllers.UserController.addUser(request: Request)
++ nocsrf
+DELETE  /users/:id                              controllers.UserController.deleteUser(id: Long)
+GET     /users/:id                              controllers.UserController.getUser(id: Long, request: Request)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)

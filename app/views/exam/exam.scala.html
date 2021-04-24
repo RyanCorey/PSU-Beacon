@@ -1,12 +1,16 @@
-@import play.twirl.api.TwirlHelperImports.twirlJavaCollectionToScala
-@import entities.Exam
-@import java.util
-@(exams: util.List[Exam])
+@import views.html.helper.form
+@import forms.ExamForm
+@import services.dto.ExamResultDTO
+@(examResult: ExamResultDTO, examForm: play.data.Form[ExamForm])(implicit messages: play.i18n.Messages)
 
 @main("Beaconn | Exams") {
     <div class="container">
         <h1 class="text-center">View Exams</h1>
-
+        <div class="row justify-content-end">
+            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addExamModal">
+                Add New Exam
+            </button>
+        </div>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -18,10 +22,10 @@
                 </tr>
             </thead>
             <tbody>
-                @if(exams.isEmpty) {
+                @if(examResult.getExams.isEmpty) {
                     <p>No Exams</p>
                 } else {
-                    @for(exam <- exams) {
+                    @for(exam <- examResult.getExams) {
                         <tr>
                             <th scope="row">@exam.getId</th>
                             <th>@exam.getExamTitle</th>
@@ -35,6 +39,38 @@
                 }
             </tbody>
         </table>
+    </div>
+
+    <div class="modal fade" id="addExamModal" tabindex="-1" role="dialog" aria-labelledby="addExamModalLabel"
+    aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Create New Exam</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @form(action = routes.ExamController.createExam()) {
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5">
+                            <input name="examTitle" type="text" id="defaultForm-examTitle" class="form-control validate">
+                            <label data-error="wrong" data-success="right" for="defaultForm-examTitle">Exam Title</label>
+                        </div>
+                        <div class="md-form mb-5">
+                            <select name="professor">
+                            @for(user <- examResult.getUsers) {
+                                <option value="@user.getId">@user.getFirstName @user.getLastName</option>
+                            }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button class="btn btn-default" type="submit">Create</button>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 }
 

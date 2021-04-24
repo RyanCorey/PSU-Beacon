@@ -1,10 +1,7 @@
 package services;
 
-import entities.Answer;
-import entities.Exam;
 import entities.Question;
 import entities.db.DatabaseExecutionContext;
-import forms.QuestionForm;
 import play.db.jpa.JPAApi;
 import repositories.QuestionRepository;
 
@@ -36,6 +33,11 @@ public class QuestionService implements QuestionRepository {
     @Override
     public Question update(Question question) {
         return wrap(em -> updateJPA(em, question));
+    }
+
+    @Override
+    public void delete(Long id) {
+        wrap(em -> deleteJPA(em, id));
     }
 
     @Override
@@ -79,9 +81,9 @@ public class QuestionService implements QuestionRepository {
         return em.createQuery("select e from Question e where e.exam.id IN :examId").setParameter("examId", examId).getResultList();
     }
 
-    /*private List<Question> getQuestionListById(EntityManager em) {
-        return em.createQuery("select e from Question e where e.exam.id IN :examId", Question.class).getResultList();
-    }*/
+    private int deleteJPA(EntityManager em, Long id) {
+        return em.createQuery("DELETE FROM Question WHERE id = " + id).executeUpdate();
+    }
 
     public Question updateJPA(EntityManager em, Question question) {
         em.merge(question);

@@ -52,8 +52,10 @@ public class AnswerController extends Controller {
 
     }
 
-
-
+    public Result deleteAnswer(Long id) {
+        answerService.delete(id);
+        return redirect(routes.AnswerController.getAnswers());
+    }
 }
 
 

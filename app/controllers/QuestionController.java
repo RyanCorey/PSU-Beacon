@@ -1,18 +1,13 @@
 package controllers;
 
 import entities.Question;
-import forms.QuestionForm;
-import org.h2.engine.User;
-import play.data.Form;
 import play.data.FormFactory;
 import play.i18n.MessagesApi;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
-import services.ExamService;
 import services.QuestionService;
-import services.UserService;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -50,6 +45,11 @@ public class QuestionController extends Controller {
         logger.log(Level.INFO, "Request to get Question: {}", id);
         var result = questionService.getQuestionById(id);
         return ok(views.html.questions.question_detail.render(result));
+    }
+
+    public Result deleteQuestion(Long id) {
+        questionService.delete(id);
+        return redirect(routes.QuestionController.getQuestions());
     }
 }
 

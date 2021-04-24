@@ -3,15 +3,38 @@
 @(answers: util.List[Answer])
 
 @main("Beaconn | Anwers") {
-    <h1>Answer listings will go here!!</h1>
+    <div class="container">
+        <h1 class="text-center">View Answers</h1>
 
-    <ul>
-    @for(answer <- answers) {
-        <li>
-            <a href="/answers/@answer.getId">
-                @answer.getAnswerText
-            </a>
-        </li>
-    }
-    </ul>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Answer</th>
+                    <th scope="col">Is Correct</th>
+                    <th scope="col">Question</th>
+                    <th scope="col">Exam</th>
+                    <th scope="col"/>
+                </tr>
+            </thead>
+            <tbody>
+            @if(answers.isEmpty) {
+                <p>No Answers</p>
+            } else {
+                @for(answer <- answers) {
+                    <tr>
+                        <th scope="row">@answer.getId</th>
+                        <th>@answer.getAnswerText</th>
+                        <th>@answer.getCorrect</th>
+                        <th>@answer.getQuestion.getQuestionText</th>
+                        <th>@answer.getQuestion.getExam.getExamTitle</th>
+                        <th>
+                            <button type="button" class="btn btn-primary" onclick="location.href = `/answers/${@answer.getId}`">View</button>
+                        </th>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
 }

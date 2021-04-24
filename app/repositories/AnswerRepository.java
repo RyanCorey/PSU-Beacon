@@ -20,4 +20,6 @@ public interface AnswerRepository {
     Answer save(Answer answer);
 
     Answer update(Answer answer);
+
+    void delete(Long id);
 }

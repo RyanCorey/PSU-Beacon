@@ -4,6 +4,8 @@ import entities.Answer;
 import entities.Exam;
 import entities.Question;
 import entities.db.DatabaseExecutionContext;
+import forms.AnswerForm;
+import forms.ExamForm;
 import forms.QuestionForm;
 import play.db.jpa.JPAApi;
 import repositories.ExamRepository;
@@ -26,14 +28,17 @@ public class ExamService implements ExamRepository {
 
     private final AnswerService answerService;
 
+    private final UserService userService;
 
     @Inject
-    public ExamService(JPAApi jpaApi, DatabaseExecutionContext executionContext, QuestionService questionService, AnswerService answerService) {
+    public ExamService(JPAApi jpaApi, DatabaseExecutionContext executionContext, QuestionService questionService, AnswerService answerService, UserService userService) {
         this.jpaApi = jpaApi;
         this.executionContext = executionContext;
         this.questionService = questionService;
         this.answerService = answerService;
+        this.userService = userService;
     }
+
 
     public void addQuestion(Long examId, QuestionForm questionForm) {
         Exam exam = getExam(examId);
@@ -41,6 +46,30 @@ public class ExamService implements ExamRepository {
         for (QuestionForm.AnswerForm answerForm: questionForm.getAnswers()) {
             answerService.save(new Answer(answerForm.getAnswerText(), answerForm.getCorrect(), question));
         }
+    }
+
+    public void addAnswer(Long examId, Long questionId, AnswerForm answerForm) {
+        var exam = getExam(examId);
+        var question = questionService.getQuestionById(questionId);
+        answerService.save(new Answer(answerForm.getAnswerText(), answerForm.getCorrect(), question));
+    }
+
+    public Exam createExam(ExamForm examForm) {
+        var user = userService.getUserById(examForm.getProfessor());
+        Exam exam = new Exam(examForm.getExamTitle(), user);
+        return save(exam);
+    }
+
+    public void deleteQuestion(Long questionId) {
+        var foundQuestion = questionService.getQuestionById(questionId);
+        for (var answer: foundQuestion.getAnswers()) {
+            answerService.delete(answer.getId());
+        }
+        questionService.delete(foundQuestion.getId());
+    }
+
+    public void deleteAnswer(Long answerId) {
+        answerService.delete(answerId);
     }
 
     @Override
@@ -51,6 +80,18 @@ public class ExamService implements ExamRepository {
     @Override
     public Exam update(Exam exam) {
         return wrap(em -> updateJPA(em, exam));
+    }
+
+    @Override
+    public void delete(Long id) {
+        var foundExam = getExamById(id);
+        for (var question : foundExam.getQuestions()) {
+            for (var answer : question.getAnswers()) {
+                answerService.delete(answer.getId());
+            }
+            questionService.delete(question.getId());
+        }
+        wrap(em -> deleteJPA(em, id));
     }
 
     @Override
@@ -79,6 +120,9 @@ public class ExamService implements ExamRepository {
     private Exam insert(EntityManager em, Exam exam) {
         em.persist(exam);
         return exam;
+    }
+    public int deleteJPA(EntityManager em, Long id) {
+        return em.createQuery("DELETE FROM Exam WHERE id = " + id).executeUpdate();
     }
 
     private List<Exam> list(EntityManager em) {

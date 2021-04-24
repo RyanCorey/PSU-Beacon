@@ -44,4 +44,12 @@ public class Answer {
     public void setCorrect(Boolean correct) {
         isCorrect = correct;
     }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
 }

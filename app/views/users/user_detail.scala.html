@@ -1,8 +1,86 @@
 @import entities.User
 @(user: User)
 
-@main("Beaconn | User" + user.getFirstName) {
-    <h1>
-        @user.getFirstName @user.getLastName
-    </h1>
-}
+    @main("Beaconn | User " + user.getFirstName) {
+        <!-- Card Regular -->
+        <div class="container mt-2">
+            <div class="row justify-content-center">
+                <div class="card">
+                        <!-- Card image -->
+                    @if(user.getProfilePictureUrl != null) {
+                        <img height="300px" class="card-img-top" src="@user.getProfilePictureUrl" alt="Card image cap">
+                    } else {
+                        <img height="300px" class="card-img-top" src="@routes.Assets.versioned("images/defaultuser.png")" alt="Card image cap">
+                    }
+
+                        <!-- Card content -->
+                    <div class="card-body text-center">
+
+                            <!-- Title -->
+                        <h4 class="card-title"><strong>@user.getFirstName @user.getLastName</strong></h4>
+                            <!-- Subtitle -->
+                        <h6 class="font-weight-bold indigo-text py-2">@user.getRole</h6>
+                            <!-- Text -->
+                        <p class="card-text">
+                        @user.getEmail
+                        </p>
+
+                        @if(user.getExamResults.isEmpty) {
+                            <p>No Exams Taken</p>
+                        } else {
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Id</th>
+                                        <th scope="col">Exam</th>
+                                        <th scope="col">Score</th>
+                                        <th scope="col"/>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @for(examResult <- user.getExamResults) {
+                                    <tr>
+                                        <th scope="row">@examResult.getId</th>
+                                        <th>@examResult.getExam.getExamTitle</th>
+                                        <th>@examResult.getFinalScore</th>
+                                        <th>
+                                            <button type="button" class="btn btn-primary" onclick="location.href = `/results/${@examResult.getId}`">View</button>
+                                        </th>
+                                    </tr>
+                                }
+
+                                </tbody>
+                            </table>
+                        }
+
+                        <div class="card-footer text-center">
+                            <button class ="btn btn-danger btn-sm"
+                            id="deleteBtn"
+                            data-url="@routes.UserController.deleteUser(user.getId)"
+                            data-redirect-url="@routes.UserController.getUsers()"
+                            >Delete User</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+                document.getElementById("deleteBtn").addEventListener("click", sendDeleteRequest);
+
+                function sendDeleteRequest() {
+                    let that = this;
+                    $.ajax({
+                        url: that.getAttribute('data-url'), //Here
+                        method: "DELETE",
+                        success: function () {
+                            window.location = that.getAttribute('data-redirect-url'); //Here
+                        },
+                        error: function () {
+                            window.location.reload();
+                        }
+                    });
+                }
+
+        </script>
+    }

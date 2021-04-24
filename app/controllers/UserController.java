@@ -1,6 +1,9 @@
 package controllers;
 
 import entities.User;
+import forms.QuestionForm;
+import forms.UserForm;
+import play.data.Form;
 import play.data.FormFactory;
 import play.i18n.MessagesApi;
 import play.libs.concurrent.HttpExecutionContext;
@@ -26,18 +29,6 @@ public class UserController extends Controller {
 
     private final play.i18n.MessagesApi messagesApi;
 
-    public Result getUsers() {
-        List<User> results = userService.list();
-        return ok(views.html.users.user.render(results));
-    }
-
-
-    public Result getUser(Long id, Http.Request request) {
-        logger.log(Level.INFO, "Request to get User: {}", id);
-        var result = userService.getUserById(id);
-        return ok(views.html.users.user_detail.render(result));
-    }
-
     @Inject
     public UserController(UserService userService,
                           FormFactory formFactory,
@@ -49,6 +40,28 @@ public class UserController extends Controller {
         this.messagesApi = messagesApi;
     }
 
+    public Result getUsers(Http.Request request) {
+        List<User> results = userService.list();
+        Form<UserForm> userForm = formFactory.form(UserForm.class).withDirectFieldAccess(true);
+        return ok(views.html.users.user.render(results, userForm, messagesApi.preferred(request)));
+    }
 
+
+    public Result getUser(Long id, Http.Request request) {
+        logger.log(Level.INFO, "Request to get User: {}", id);
+        var result = userService.getUserById(id);
+        return ok(views.html.users.user_detail.render(result));
+    }
+
+    public Result addUser(Http.Request request) {
+        final Form<UserForm> form = formFactory.form(UserForm.class).bindFromRequest(request);
+        userService.createUser(form.get());
+        return redirect(routes.UserController.getUsers());
+    }
+
+    public Result deleteUser(Long id) {
+        userService.delete(id);
+        return redirect(routes.UserController.getUsers());
+    }
 }
 

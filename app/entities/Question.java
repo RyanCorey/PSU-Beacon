@@ -23,7 +23,7 @@ public class Question{
     @ManyToOne(fetch = FetchType.EAGER)
     private Exam exam;
 
-    @OneToMany(mappedBy="question", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="question", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Answer> answers;
     
     public Question() {}

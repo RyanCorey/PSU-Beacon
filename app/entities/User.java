@@ -15,15 +15,21 @@ public class User {
 
     private String lastName;
 
+    private String email;
+
+    private String profilePictureUrl;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany(mappedBy="student", fetch = FetchType.EAGER)
     private Set<ExamResult> examResults;
 
-    public User(String firstName, String lastName, Role role) {
+    public User(String firstName, String lastName, String email, String profilePictureUrl, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
+        this.profilePictureUrl = profilePictureUrl;
         this.role = role;
     }
 
@@ -34,6 +40,30 @@ public class User {
         return id;
     }
 
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
+    }
+
+    public Set<ExamResult> getExamResults() {
+        return examResults;
+    }
+
+    public void setExamResults(Set<ExamResult> examResults) {
+        this.examResults = examResults;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getFirstName() {
         return firstName;

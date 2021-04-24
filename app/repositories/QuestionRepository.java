@@ -16,4 +16,5 @@ public interface QuestionRepository {
     Question getQuestionById(Long id);
     Question save(Question question);
     Question update(Question question);
+    void delete(Long id);
 }

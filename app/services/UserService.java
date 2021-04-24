@@ -3,11 +3,17 @@ package services;
 
 import entities.User;
 import entities.db.DatabaseExecutionContext;
+import entities.enumerations.Role;
+import forms.UserForm;
 import play.db.jpa.JPAApi;
 import repositories.UserRepository;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.function.Function;
 import java.util.logging.Logger;
@@ -37,6 +43,11 @@ public class UserService implements UserRepository {
     }
 
     @Override
+    public void delete(Long id) {
+        wrap(em -> deleteJPA(em, id));
+    }
+
+    @Override
     public User getUserById(Long examId) {
         return wrap(em -> getUserJPA(em, examId));
     }
@@ -44,6 +55,11 @@ public class UserService implements UserRepository {
     @Override
     public List<User> list() {
         return wrap(this::list);
+    }
+
+    @Override
+    public List<User> findAllByRole(Role role) {
+        return wrap(em -> getAllByRole(em, role));
     }
 
     private <T> T wrap(Function<EntityManager, T> function) {
@@ -63,8 +79,28 @@ public class UserService implements UserRepository {
         return em.createQuery("select e from User e", User.class).getResultList();
     }
 
+    public List<User> getAllByRole(EntityManager em, Role role) {
+        Query query = em.createQuery("SELECT u from User u WHERE u.role = :role", User.class);
+        query.setParameter("role", role);
+        return query.getResultList();
+    }
+
     public User updateJPA(EntityManager em, User user) {
         em.merge(user);
         return user;
+    }
+
+    public int deleteJPA(EntityManager em, Long id) {
+        return em.createQuery("DELETE FROM User WHERE id = " + id).executeUpdate();
+    }
+
+    public User createUser(UserForm userForm) {
+        var user = new User();
+        user.setEmail(userForm.getEmail());
+        user.setProfilePictureUrl(userForm.getProfilePictureUrl());
+        user.setFirstName(userForm.getFirstName());
+        user.setLastName(userForm.getLastName());
+        user.setRole(userForm.getRole());
+        return save(user);
     }
 }

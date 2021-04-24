@@ -4,12 +4,37 @@
 @(questions: util.List[Question])
 
 
-    @main("Beaconn | Questions") {
-        <ul>
-        @for(question <- questions) {
-            <li>
-                @question.getQuestionText
-            </li>
-        }
-        </ul>
-    }
+@main("Beaconn | Questions") {
+    <div class="container">
+        <h1 class="text-center">View Questions</h1>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Question</th>
+                    <th scope="col"># of Answers</th>
+                    <th scope="col">Exam</th>
+                    <th scope="col"/>
+                </tr>
+            </thead>
+            <tbody>
+            @if(questions.isEmpty) {
+                <p>No Questions</p>
+            } else {
+                @for(question <- questions) {
+                    <tr>
+                        <th scope="row">@question.getId</th>
+                        <th>@question.getQuestionText</th>
+                        <th>@question.getAnswers.size</th>
+                        <th>@question.getExam.getExamTitle</th>
+                        <th>
+                            <button type="button" class="btn btn-primary" onclick="location.href = `/questions/${@question.getId}`">View</button>
+                        </th>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+}

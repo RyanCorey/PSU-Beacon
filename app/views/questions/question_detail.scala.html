@@ -1,2 +1,90 @@
 @import entities.Question
 @(question: Question)
+
+@main("Beaconn | Question " + question.getId) {
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-3">
+                <div class="card grey lighten-5 mb-3" style="max-width: 20rem;">
+                    <div class="card-header">@question.getQuestionText</div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            ID: @question.getId
+                        </p>
+                        <p class="card-text">
+                            Exam: @question.getExam.getExamTitle
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="row justify-content-end">
+                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addAnswerModal">
+                        Add New Answer
+                    </button>
+                </div>
+                <div class="row">
+                    <table class="table table-hover" style="border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Answer</th>
+                                <th scope="col">Is Correct</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @if(question.getAnswers.isEmpty) {
+                            <p>No Answers</p>
+                        } else {
+                            @for(answer <- question.getAnswers) {
+                                <tr data-toggle="collapse" data-target="#answerCollapse-@answer.getId" class="clickable">
+                                    <td scope="row">@answer.getId</td>
+                                    <td>@answer.getAnswerText</td>
+                                    <td>@answer.getCorrect</td>
+                                </tr>
+                            }
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addQuestionModal" tabindex="-1" role="dialog" aria-labelledby="addAnswerModalLabel"
+    aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Create New Question</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+@*                @form(action = routes.ExamController.addQuestion(exam.getId)) {*@
+@*                    <div class="modal-body mx-3">*@
+@*                        <div class="md-form mb-5">*@
+@*                            <input name="questionText" type="text" id="defaultForm-questionText" class="form-control validate">*@
+@*                            <label data-error="wrong" data-success="right" for="defaultForm-email">Question Text</label>*@
+@*                        </div>*@
+
+@*                        @helper.repeatWithIndex(questionForm("answers"), min = 4) { (answer, index) =>*@
+@*                            <div class="row">*@
+@*                                <div class="col">*@
+@*                                    @helper.inputText(answer("answerText"), Symbol("_label") -> ("Answer #" + index))*@
+
+@*                                </div>*@
+@*                                <div class="col">*@
+@*                                @helper.checkbox(answer("isCorrect"), Symbol("_label") -> ("Is Correct Answer?"))*@
+@*                                </div>*@
+@*                            </div>*@
+@*                        }*@
+@*                    </div>*@
+@*                    <div class="modal-footer d-flex justify-content-center">*@
+@*                        <button class="btn btn-default" type="submit">Create</button>*@
+@*                    </div>*@
+@*                }*@
+            </div>
+        </div>
+    </div>
+}

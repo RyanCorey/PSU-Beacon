@@ -2,7 +2,34 @@
 @(answer: Answer)
 
 @main("Beaconn | Answer " + answer.getId) {
-    <h1>
-        @answer.getAnswerText
-    </h1>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-10">
+                <div class="card grey lighten-5 mb-3">
+                    <div class="card-header">@answer.getAnswerText</div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            ID: @answer.getId
+                        </p>
+                        <p class="card-text">
+                            Is Correct?: @answer.getCorrect
+                        </p>
+                        <p class="card-text">
+                            Question: @answer.getQuestion.getQuestionText
+                        </p>
+                        <p class="card-text">
+                            Exam: @answer.getQuestion.getExam.getExamTitle
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row justify-content-end">
+                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteAnswerModal">
+                        Delete Answer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 }

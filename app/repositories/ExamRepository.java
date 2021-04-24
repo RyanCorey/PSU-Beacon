@@ -18,4 +18,6 @@ public interface ExamRepository {
     Exam save(Exam exam);
 
     Exam update(Exam exam);
+
+    void delete(Long id);
 }
