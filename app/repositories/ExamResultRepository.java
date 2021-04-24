@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 public interface ExamResultRepository {
     List<ExamResult> list();
 
+    List<ExamResult> getExamResultListById(Long examId);
+
     ExamResult getExamResultById(Long id);
 
     ExamResult save(ExamResult examResult);
