@@ -3,6 +3,7 @@ package controllers;
 import entities.Question;
 import play.data.FormFactory;
 import play.i18n.MessagesApi;
+import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -41,10 +42,21 @@ public class QuestionController extends Controller {
         return ok(views.html.questions.question.render(results));
     }
 
+    public Result getQuestionsAsJson() {
+        List<Question> results = questionService.list();
+        return ok(Json.toJson(results));
+    }
+
     public Result getQuestion(Long id, Http.Request request) {
         logger.log(Level.INFO, "Request to get Question: {}", id);
         var result = questionService.getQuestionById(id);
         return ok(views.html.questions.question_detail.render(result));
+    }
+
+    public Result getQuestionAsJson(Long id) {
+        logger.log(Level.INFO, "Request to get Question: {}", id);
+        var result = questionService.getQuestionById(id);
+        return ok(Json.toJson(result));
     }
 
     public Result deleteQuestion(Long id) {

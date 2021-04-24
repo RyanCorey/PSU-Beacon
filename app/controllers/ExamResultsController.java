@@ -2,6 +2,7 @@ package controllers;
 
 import play.data.FormFactory;
 import play.i18n.MessagesApi;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -44,6 +45,11 @@ public class ExamResultsController extends Controller {
         return ok(views.html.results.results.render(results));
     }
 
+    public Result getExamResultsAsJson() {
+        var results = examResultService.list();
+        return ok(Json.toJson(results));
+    }
+
     /**
      * Get request. Get's an exam result based on its database PK(id)
      * @param id The PK of the entity to retrieve
@@ -55,5 +61,11 @@ public class ExamResultsController extends Controller {
         var res = questionService.getListQuestionById(id);
         var result = answerService.getAnswerListById(id);
         return ok(views.html.results.results_detail.render(res, result));
+    }
+
+    public Result getExamResultAsJson(Long id){
+        logger.log(Level.INFO, "Request to get Exam Result Item: {}", id);
+        var result = examResultService.getExamResultById(id);
+        return ok(Json.toJson(result));
     }
 }

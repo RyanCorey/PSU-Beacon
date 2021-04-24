@@ -6,6 +6,7 @@ import forms.UserForm;
 import play.data.Form;
 import play.data.FormFactory;
 import play.i18n.MessagesApi;
+import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -46,11 +47,22 @@ public class UserController extends Controller {
         return ok(views.html.users.user.render(results, userForm, messagesApi.preferred(request)));
     }
 
+    public Result getUsersAsJson() {
+        List<User> results = userService.list();
+        return ok(Json.toJson(results));
+    }
+
 
     public Result getUser(Long id, Http.Request request) {
         logger.log(Level.INFO, "Request to get User: {}", id);
         var result = userService.getUserById(id);
         return ok(views.html.users.user_detail.render(result));
+    }
+
+    public Result getUserAsJson(Long id) {
+        logger.log(Level.INFO, "Request to get User: {}", id);
+        var result = userService.getUserById(id);
+        return ok(Json.toJson(result));
     }
 
     public Result addUser(Http.Request request) {

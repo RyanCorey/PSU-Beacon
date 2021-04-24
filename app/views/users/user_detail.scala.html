@@ -4,6 +4,11 @@
     @main("Beaconn | User " + user.getFirstName) {
         <!-- Card Regular -->
         <div class="container mt-2">
+            <div class="row justify-content-end">
+                <a class="btn btn-warning btn-sm" href="@routes.UserController.getUserAsJson(user.getId)">
+                    View As Json
+                </a>
+            </div>
             <div class="row justify-content-center">
                 <div class="card">
                         <!-- Card image -->

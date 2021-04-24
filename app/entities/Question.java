@@ -5,6 +5,8 @@
  */
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -20,9 +22,11 @@ public class Question{
     
     private String questionText;
 
+    @JsonIgnoreProperties("questions")
     @ManyToOne(fetch = FetchType.EAGER)
     private Exam exam;
 
+    @JsonIgnoreProperties("question")
     @OneToMany(mappedBy="question", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Answer> answers;
     

@@ -7,6 +7,7 @@ import forms.*;
 import play.data.Form;
 import play.data.FormFactory;
 import play.i18n.MessagesApi;
+import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -60,6 +61,11 @@ public class ExamController extends Controller {
         return ok(views.html.exam.exam.render(examResult, examForm, messagesApi.preferred(request)));
     }
 
+    public Result getExamsAsJson() {
+        var results = examService.list();
+        return ok(Json.toJson(results));
+    }
+
     /**
      * Get request. Get's an exam based on its database PK(id)
      * @param id The PK of the entity to retrieve
@@ -74,6 +80,11 @@ public class ExamController extends Controller {
         return ok(views.html.exam.exam_detail.render(result, questionForm, answerForm, messagesApi.preferred(request)));
     }
 
+    public Result getExamAsJson(Long id) {
+        var result = examService.getExamById(id);
+        return ok(Json.toJson(result));
+    }
+
     public Result createExam(Http.Request request) {
         final Form<ExamForm> form = formFactory.form(ExamForm.class).bindFromRequest(request);
         var exam = examService.createExam(form.get());
@@ -82,7 +93,7 @@ public class ExamController extends Controller {
 
     /**
      * Post request. Creates a new question for an Exam
-     * @param id The PK of the EXAM to add a question to
+     * @param examId The PK of the EXAM to add a question to
      * @param request The HTTP request
      * @return Return a redirect to the getExam() method
      */

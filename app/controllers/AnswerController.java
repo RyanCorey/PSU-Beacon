@@ -5,6 +5,7 @@ import forms.QuestionForm;
 import play.data.Form;
 import play.data.FormFactory;
 import play.i18n.MessagesApi;
+import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -44,12 +45,23 @@ public class AnswerController extends Controller {
         return ok(views.html.answers.answer.render(answers));
     }
 
+    public Result getAnswersAsJson() {
+        logger.log(Level.INFO, "Request to get All Answers");
+        var answers = answerService.list();
+        return ok(Json.toJson(answers));
+    }
+
     public Result getAnswer(Long id, Http.Request request) {
         logger.log(Level.INFO, "Request to get Answer: {}", id);
         Form<QuestionForm.AnswerForm> answerForm = formFactory.form(QuestionForm.AnswerForm.class).withDirectFieldAccess(true);
         var answer = answerService.getAnswerById(id);
         return ok(views.html.answers.answer_detail.render(answer));
+    }
 
+    public Result getAnswerAsJson(Long id) {
+        logger.log(Level.INFO, "Request to get Answer: {}", id);
+        var answer = answerService.getAnswerById(id);
+        return ok(Json.toJson(answer));
     }
 
     public Result deleteAnswer(Long id) {
