@@ -35,7 +35,7 @@ GET     /questions/json                         controllers.QuestionController.g
 + nocsrf
 DELETE  /questions/:id                          controllers.QuestionController.deleteQuestion(id: Long)
 GET     /questions/:id                          controllers.QuestionController.getQuestion(id: Long, request: Request)
-GET     /questions/:id                          controllers.QuestionController.getQuestionAsJson(id: Long)
+GET     /questions/:id/json                          controllers.QuestionController.getQuestionAsJson(id: Long)
 
 # Answer URLS
 GET     /answers                                controllers.AnswerController.getAnswers()

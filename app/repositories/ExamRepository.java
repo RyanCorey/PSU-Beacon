@@ -8,7 +8,6 @@ import java.util.List;
 
 @ImplementedBy(ExamService.class)
 public interface ExamRepository {
-
     List<Exam> list();
 
     Exam getExamById(Long id);
